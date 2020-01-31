@@ -1,7 +1,7 @@
 %% this script extract the infos of TimeKeeper, saved as subjnamesessionTimer.mat
 %==========================================================================
 % created by: YN 12/12/2019
-% last update: YN 17/01/2020
+% last update: YN 31/01/2020
 %==========================================================================
 
 clc
@@ -25,7 +25,7 @@ while promptUser
 
     prompt1=inputdlg('Subject ID','Output File',1,{'tmp'});
     if isempty(prompt1)
-        disp(['Script annulÃ©...']);
+        disp(['Script annule...']);
         return;
     else
         initials=prompt1{1};
@@ -33,7 +33,7 @@ while promptUser
 
     prompt2=inputdlg('Block number','Output File',1,{'tmp'});
     if isempty(prompt2)
-        disp(['Script annulÃ©...']);
+        disp(['Script annule...']);
         return;
     else
         blocknum =prompt2{1};
@@ -57,15 +57,25 @@ while promptUser
 end
 
 % did you used eeg ?
-used_EEG = false;
+EEG_rep = input('Did you used EEG? (0/1)');
+if EEG_rep == 1
+    EEG = true;
+else 
+    EEG = false;
+end
 
 % do you want to plot ?
-plot = false;
+plot_rep = input('Do you want to plot ugly graph? (0/1)');
+if plot_rep == 1
+    plot = true;
+else 
+    plot = false;
+end
 
 % check for -99
 B = TimeKeeper == -99;
 C = sum(sum(B)); % nbr of element missing should be 3*20
-disp(['il manque ' num2str(C) ' éléments.'])
+disp(['il manque ' num2str(C) ' elements.'])
 disp('========================================')
 % if ~ used_EEG
 %     disp('3*20 Ã©lÃ©ments manquants Ã©taient attendus')
