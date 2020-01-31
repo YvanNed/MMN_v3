@@ -1,7 +1,7 @@
 function MMN_Duration_v3
 % =========================================================================
 % created by: YN. 27/11/2019
-% last Update: YN. 17/01/2020
+% last Update: YN. 30/01/2020
 % =========================================================================
 %% Description
 % basic passive MMN duration with at least 2 standards (o) between a deviant (x)
@@ -71,7 +71,7 @@ try
     
     %-------------------------- Define Result path ------------------------
     %----------------------------------------------------------------------
-    result_path = 'D:\Thèse\PROJECTS\MMN\SCRIPTS\MisMatchNegativity-MMN_dur_v3\RESULTS\';
+    result_path = 'D:\Thï¿½se\PROJECTS\MMN\SCRIPTS\MisMatchNegativity-MMN_complete_STIM_v2\RESULTS\';
     %----------------------------------------------------------------------
 
     %----------------------- Pc port initialization for EEG----------------
@@ -101,7 +101,7 @@ try
     nTOT = 2000;                                                            % stimulus number  = 2000 (100%)
     %----------------------------------------------------------------------
     
-    %---------------------------- Create clicks ----------------------------
+    %---------------------------- Create clicks ---------------------------
     %----------------------------------------------------------------------
     click_dur = 0.005;                                                      % default click duration 5ms
     N = floor(sf*click_dur);                                                % number of samples for 5ms click
@@ -341,14 +341,14 @@ try
     nT = length(expMat);
     
     %!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    %!!!!!!!!!!!!!!!!!!!!!!!!! NEED TO BE COMMENT !!!!!!!!!!!!!!!!!!!!!!!!!
+    %!!!!!!!!!!!!!!!!!!!!!!!!! NEED TO BE REMOVED !!!!!!!!!!!!!!!!!!!!!!!!!
     %!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    %nT=5; % it was just to debug, the nbr of trial is reduce to 20
+    nT=5; % it was just to debug, the nbr of trial is reduce to 20
     %!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     %!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     %!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     
-    TimeKeeper = -99*ones(nT,10);                                           % initialize matrix that store the timing in our task and that can be read with the appropriate script
+    TimeKeeper = -99*ones(nT,9);                                           % initialize matrix that store the timing in our task and that can be read with the appropriate script
     
     Screen('TextFont', w, 'Geneva'); 
     drawFixation(FIX_COLOR);
@@ -533,4 +533,3 @@ function displayFixation( color )
     global w
     drawFixation( color );
     Screen('Flip', w);
-
