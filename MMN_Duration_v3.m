@@ -28,7 +28,12 @@ ESC_KEY  ='ESCAPE';                                                         % ke
 KbName('UnifyKeyNames');
 escapeKey = KbName('ESCAPE');
 
-USE_EEG = false;
+EEG = input('Are you using EEG? (0/1)');
+if EEG == 1
+    USE_EEG = true;
+else 
+    USE_EEG = false;
+end
  
 try 
     %----------------- Start the PsychToolBox sound driver ----------------
@@ -71,7 +76,7 @@ try
     
     %-------------------------- Define Result path ------------------------
     %----------------------------------------------------------------------
-    result_path = 'D:\Th�se\PROJECTS\MMN\SCRIPTS\MisMatchNegativity-MMN_complete_STIM_v2\RESULTS\';
+    result_path = 'D:\These\PROJECTS\MMN\SCRIPTS\MisMatchNegativity-MMN_complete_STIM_v2\RESULTS\';
     %----------------------------------------------------------------------
 
     %----------------------- Pc port initialization for EEG----------------
