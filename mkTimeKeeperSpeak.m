@@ -7,7 +7,15 @@
 clc
 clear all;
 
-result_path = [pwd '/RESULTS/'];
+if isunix
+    slash = '/';
+elseif ismac
+    slash = '/';
+elseif ispc
+    slash = '\';
+end
+
+result_path = [pwd slash 'RESULTS' slash];
 
 % ask the name of the file
 dataFile   = 'tmp';
