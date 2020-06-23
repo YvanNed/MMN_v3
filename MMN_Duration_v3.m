@@ -76,13 +76,14 @@ try
     
     %-------------------------- Define Result path ------------------------
     %----------------------------------------------------------------------
-    result_path = 'D:\These\PROJECTS\MMN\SCRIPTS\MisMatchNegativity-MMN_complete_STIM_v2\RESULTS\';
+    result_path = 'C:\Users\admin-local\Documents\MATLAB\MATLAB2\Library\Yvan_tasks\MMN_v3-64EEG_noWS_LISI\RESULTS\';
     %----------------------------------------------------------------------
 
     %----------------------- Pc port initialization for EEG----------------
     %----------------------------------------------------------------------
     if USE_EEG
-        address = IOPort('OpenSerialPort','COM4');                          % le port depend de l'ordi
+        config_io
+        address = hex2dec('378');                                           % le port depend de l'ordi
     end
     %----------------------------------------------------------------------
     
@@ -97,12 +98,12 @@ try
     %----------------------------------------------------------------------
     std_dur = 0.200;                                                        % std duration (o) = 200 ms (in sec)                
     dev_dur = [0.100 0.150 0.250 0.300];                                    % dev duration (x) = 100 150 250 300 ms (in sec). 25 and 50% of the std dur 
-    ISI = [0.400 0.600];                                                    % ISI = 400:600ms (in sec). Std dur + Temporal Window Integration
+    ISI = [0.80 1.00];                                                    % ISI = 800:1000ms (in sec). ISI have been extended to aoid an overlap of the baseline of the MMN of the previous trial
     ISIf = round(ISI./ifi);                                                 % convert ISI in number of frame
     
     
-    nStd = 266;                                                             % calculate by hands, 2000/3 = 666 ; we have 400 dev ; so we still need 266 std % standard number  = 1600 (80%)  
-    nDev = 100;                                                             % deviant number   = 400  (5% each) (100 each)
+    nStd = 400;                                                             % calculate by hands, 2000/2 = 1000 ; we have 600 dev ; so we still need 400 std % standard number  = 1600 (80%)  
+    nDev = 150;                                                             % deviant number   = 600  (7.5% each) (150 each)
     nTOT = 2000;                                                            % stimulus number  = 2000 (100%)
     %----------------------------------------------------------------------
     
@@ -169,7 +170,7 @@ try
 
         % loop that add a random stim (either std or dev) between 2 std
         idx = 1; 
-        for i = 3:3:length(expMat)
+        for i = 2:2:length(expMat)
             expMat(i,2) = rand_stim(idx,2);
             idx = idx+1;
         end
@@ -276,7 +277,7 @@ try
                 dataFile = [result_path tmpFile];
                 promptUser = false;
             else
-                replace=questdlg(['Un fichier de ce nom existe deja ', tmpFile, '. Voulez-vous le remplacer?']);
+                replace=questdlg(['Un fichier de ce nom existe deja ', tmpFile, '. Voulez-vous le remplacer?']);
                 if strcmp( replace, 'Yes' )
                    dataFile = [result_path tmpFile];
                    promptUser = false;
@@ -348,7 +349,7 @@ try
     %!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     %!!!!!!!!!!!!!!!!!!!!!!!!! NEED TO BE COMMENTED !!!!!!!!!!!!!!!!!!!!!!!!!
     %!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    nT=5; % it was just to debug, the nbr of trial is reduce to 20
+    %nT=5; % it was just to debug, the nbr of trial is reduce to 20
     %!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     %!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     %!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -361,8 +362,9 @@ try
     
     % trigger pour le debut de la tache
     if USE_EEG
-        [nwritten_start, t_trigger_start] = IOPort('Write', address, uint8(226),0); % le trigger 226 signe le debut de la tache
+        outp(address, 226); % le trigger 226 signe le debut de la tâche
         WaitSecs(0.5);
+        outp(address, 0);
     end
 
     PsychPortAudio('FillBuffer', pahandle, STD);
@@ -404,8 +406,8 @@ try
         
         % trigger interval ONSET
         if USE_EEG
-            [nwritten1, t_trigger_onset]=IOPort('Write', address, uint8(expMat(trial,4)),0);
-            TimeKeeper(trial,3) = t_trigger_onset;                          % timing should be less than 1ms after sound start
+            outp(address,expMat(trial,4)); % with the outp function we don't have timestamp of the trigger...
+            TimeKeeper(trial,3) = GetSecs;
         end
         
         [startTime_s endPositionSecs_s xruns estStopTime_s] = PsychPortAudio('Stop', pahandle, 1);
@@ -413,11 +415,14 @@ try
         TimeKeeper(trial,5) = endPositionSecs_s;                            % duration of the sound played
         TimeKeeper(trial,6) = estStopTime_s;                                % estimation of when the sound is finished
         
+        outp(address, 0);                                                   % should reset the pin after the sound stopped
         % trigger interval OFFSET
-        if USE_EEG
-            [nwritten2, t_trigger_offset]=IOPort('Write', address, uint8(expMat(trial,5)),0);
-            TimeKeeper(trial,7) = t_trigger_offset;                         % timing should be close to estStopTime (end of sound) but it wa noticed before that timing was variable (8 to 14ms) and before the sound stop...
-        end
+%         if USE_EEG
+%             outp(address,expMat(trial,5));
+%             TimeKeeper(trial,7) = GetSecs;
+%             WaitSecs(0.01);
+%             outp(address, 0);
+%         end
         
         Screen('TextFont', w, 'Geneva'); 
         drawFixation(FIX_COLOR);
@@ -426,8 +431,8 @@ try
         
         % trigger END of trial
         if USE_EEG
-            [nwritten, t_trigger_trialstop]=IOPort('Write', address, uint8(150),0); % le trigger 150 correspond a la fin du trial
-            TimeKeeper(trial,9) = t_trigger_trialstop;                      % timing should be less than 1ms after trial stop and if trial stop is accurate then trigg stop could be used as trigger offset
+            outp(address,150); % le trigger 150 correspond a la fin du trial
+            TimeKeeper(trial,9) = GetSecs;
         end
         
         % Wait ITI (frames)
@@ -436,6 +441,8 @@ try
             drawFixation(FIX_COLOR);
             Screen('Flip', w);
         end
+        
+        outp(address, 0);                                                   % should reset the oin after the ITI
                 
         [KeyIsDown, secs, keyCode, deltaSecs] = KbCheck;
         KeyNum = find(keyCode);
@@ -446,7 +453,9 @@ try
     end
     
     if USE_EEG
-        [nwrittenEND, t_triggerEND]=IOPort('Write', address, uint8(200),0); % le trigger 200 correspond a la fin de la tache
+        outp(address,200); % le trigger 200 correspond a la fin de la tache
+        WaitSecs(0.1);
+        outp(address, 0);
     end
 
     Screen('TextSize', w, 30);
