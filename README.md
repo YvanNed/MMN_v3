@@ -15,3 +15,5 @@ There is different script for different block:
 - equal probabilistic distribution between all the stimuli
 - Longer duration with only two deviant (one longer one shorter) but the ratio (1/2) in the deviance was kept
 - Longer duration with only two deviant (one longer one shorter) but the difference (+- 100ms) in the deviance was kept
+
+If I manadge to find the time it would be good to create a master function that start each script automatically with a pause in bewteen, but the design of the script rigth now! 
