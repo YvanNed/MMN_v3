@@ -1,13 +1,13 @@
 function MMN_Duration_v3
 % =========================================================================
 % created by: YN. 27/11/2019
-% last Update: YN. 30/01/2020
+% last Update: YN. 23/06/2020
 % =========================================================================
 %% Description
 % basic passive MMN duration with at least 2 standards (o) between a deviant (x)
 % o o o o o x o o o o o x o o x ...
 % =========================================================================
-% Parameters have been change so that the total duration of MMN is 23,3min, and stim sound are now silent duration of the wanted duration include in two 1ms white nois burst.
+% Parameters have been change so that the total duration of MMN is 38,6min, and stim sound are now silent duration of the wanted duration include in two 5ms white nois burst.
 % =========================================================================
 
 clear all; 
@@ -88,10 +88,10 @@ try
     %----------------------------------------------------------------------
     
 %% Initialisation
-    % In the lab, we want at least 100 dev per duration (this number will be optimized for the train travel on another script)
+    % In the lab, we want at least 150 dev per duration (this number will be optimized for the train travel on another script)
     % And we want at least 2 std between a dev ( o o x )
-    % we have 4 dev so 400 dev in total. it means we need at least 400 sequences o o x
-    % we want 5% of dev compared to std so we will do loop putting 2 std and
+    % we have 4 dev so 600 dev in total. it means we need at least 600 sequences o o x
+    % we want 7.5% of dev compared to std so we will do loop putting 2 std and
     % then take randomly either a std or a dev.
     
     %---------------------------- Parameters ------------------------------
@@ -102,7 +102,7 @@ try
     ISIf = round(ISI./ifi);                                                 % convert ISI in number of frame
     
     
-    nStd = 400;                                                             % calculate by hands, 2000/2 = 1000 ; we have 600 dev ; so we still need 400 std % standard number  = 1600 (80%)  
+    nStd = 400;                                                             % calculate by hands, 2000/2 = 1000 ; we have 600 dev ; so we still need 400 std % standard number  = 1400 (70%)  
     nDev = 150;                                                             % deviant number   = 600  (7.5% each) (150 each)
     nTOT = 2000;                                                            % stimulus number  = 2000 (100%)
     %----------------------------------------------------------------------
