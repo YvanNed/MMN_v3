@@ -10,5 +10,8 @@ mkTimeKeeperSpeak allows to check the timing in the results obtained.
 
 RESULT folder is where the expMat and other variable are saved.
 
-There is two version of the task, one for the lab and one for the train.
-For the lab, there is one code for the 32 EEG device and an other for the 64 EEG.
+There is different script for different block:
+- probabilistic distribution focus on a standard duration
+- equal probabilistic distribution between all the stimuli
+- Longer duration with only two deviant (one longer one shorter) but the ratio (1/2) in the deviance was kept
+- Longer duration with only two deviant (one longer one shorter) but the difference (+- 100ms) in the deviance was kept
