@@ -4,10 +4,10 @@ function MMN_Duration_v3
 % last Update: YN. 23/06/2020
 % =========================================================================
 %% Description
-% basic passive MMN duration with at least 2 standards (o) between a deviant (x)
-% o o o o o x o o o o o x o o x ...
+% Presentation of auditory stimuli separated by different SOA (aka duration stimuli), in a complete random order
+% x1 x3 x2 x5 x4 x3 x5 x2 x1 x4 ...
 % =========================================================================
-% Parameters have been change so that the total duration of MMN is 18,3min, and stim sound are now silent duration of the wanted duration include in two 5ms white nois burst.
+% total duration of MMN is ~7min, stim sound are silent duration of a wanted duration include in two 5ms white noise burst.
 % =========================================================================
 
 clear all; 
@@ -88,11 +88,8 @@ try
     %----------------------------------------------------------------------
     
 %% Initialisation
-    % In the lab, we want at least 75 dev per duration (this number will be optimized for the train travel on another script)
-    % And we want at least 2 std between a dev ( o o x )
-    % we have 4 dev so 600 dev in total. it means we need at least 600 sequences o o x
-    % we want 7.5% of dev compared to std so we will do loop putting 2 std and
-    % then take randomly either a std or a dev.
+    % This is a control block where there is no standard stimulus that is over represented. All the stimulus are equally presented in a random order.
+    % Each stimulus is presented 75 times (to have the same amount than the deviant of the focal distribution block, and htat this block is short)
     
     %---------------------------- Parameters ------------------------------
     %----------------------------------------------------------------------
@@ -102,9 +99,9 @@ try
     ISIf = round(ISI./ifi);                                                 % convert ISI in number of frame
     
     
-    nStd = 200;                                                             % calculate by hands, 1000/2 = 500 ; we have 300 dev ; so we still need 200 std % standard number  = 700 (70%)  
+    nStd = 75;                                                             % calculate by hands, 1000/2 = 500 ; we have 300 dev ; so we still need 200 std % standard number  = 700 (70%)  
     nDev = 75;                                                             % deviant number   = 300  (7.5% each) (75 each)
-    nTOT = 1000;                                                            % stimulus number  = 1000 (100%)
+    nTOT = 375;                                                            % stimulus number  = 1000 (100%)
     %----------------------------------------------------------------------
     
     %---------------------------- Create clicks ---------------------------
@@ -157,8 +154,8 @@ try
         expMat       = sortrows(expMat);
 
         % create the random order of dev and std vector.
-        n_std  = std_dur*ones(nStd,2);                                      % create a vector of 266 stim containing 500 for the duration of std
-        n_dev1 = dev_dur(1,1)*ones(nDev,2);                                 % create a vector of 100 stim containing 400 for the duration of dev1
+        n_std  = std_dur*ones(nStd,2);                                      % create a vector of 75 stim containing 200 for the duration of std
+        n_dev1 = dev_dur(1,1)*ones(nDev,2);                                 % create a vector of 75 stim containing 100 for the duration of dev1
         n_dev2 = dev_dur(1,2)*ones(nDev,2);                                 % ... dev2
         n_dev3 = dev_dur(1,3)*ones(nDev,2);                                 % ... dev3
         n_dev4 = dev_dur(1,4)*ones(nDev,2);                                 % ... dev4
@@ -168,22 +165,8 @@ try
         rand_stim(:,1) = randperm(length(rand_stim));                       % create the random order
         rand_stim = sortrows(rand_stim);
 
-        % loop that add a random stim (either std or dev) between 2 std
-        idx = 1; 
-        for i = 2:2:length(expMat)
-            expMat(i,2) = rand_stim(idx,2);
-            idx = idx+1;
-        end
-
-        % fill up the matrix with the std
-        count = 0;
-        for i = 1:length(expMat)
-            if expMat(i,2) == -99
-                expMat(i,2) = std_dur;
-            else
-                count = count+1;
-            end
-        end
+        % Insert the random order of stim in the experimental matrix
+        expMat(:,2) = rand_stim(:,2)
 
         % check if we have all the stim and add trigger: 
         % o 10 & 11 = dev1 sound1 & sound2;
