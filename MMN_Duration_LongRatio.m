@@ -103,7 +103,7 @@ try
     ISIf = round(ISI./ifi);                                                 % convert ISI in number of frame
     
     
-    nStd = 38;                                                             % calculate by hands, 1000/2 = 500 ; we have 300 dev ; so we still need 200 std % standard number  = 700 (70%)  
+    nStd = 37;                                                             % calculate by hands, 1000/2 = 500 ; we have 300 dev ; so we still need 200 std % standard number  = 700 (70%)  
     nDev = 75;                                                             % deviant number   = 300  (7.5% each) (75 each)
     nTOT = 375;                                                            % stimulus number  = 1000 (100%)
     %----------------------------------------------------------------------
