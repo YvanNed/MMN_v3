@@ -98,7 +98,7 @@ try
     %---------------------------- Parameters ------------------------------
     %----------------------------------------------------------------------
     std_dur = 1.00;                                                        % std duration (o) = 1 s (in sec)                
-    dev_dur = [0.500 1.50];                                    % dev duration (x) = 0.5 1.5s (in sec). 50% of the std dur 
+    dev_dur = [0.50 1.50];                                    % dev duration (x) = 0.5 1.5s (in sec). 50% of the std dur 
     ISI = [1.80 2.00];                                                    % ISI = 1.8:2s (in sec). ISI have been extended to avoid an overlap of the baseline of the MMN of the previous trial
     ISIf = round(ISI./ifi);                                                 % convert ISI in number of frame
     
@@ -358,16 +358,12 @@ try
         
         % read duration of the interval
         STIM = [];
-        if expMat(trial,2) == 0.200
+        if expMat(trial,2) == 1.00
             STIM = STD;
-        elseif expMat(trial,2)== 0.100
+        elseif expMat(trial,2)== 0.50
             STIM = DEV1;
-        elseif expMat(trial,2)== 0.150
+        elseif expMat(trial,2)== 1.50
             STIM = DEV2;
-        elseif expMat(trial,2) == 0.250
-            STIM = DEV3;
-        elseif expMat(trial,2)== 0.300
-            STIM = DEV4;
         end
         
         PsychPortAudio('FillBuffer', pahandle, STIM);
@@ -391,7 +387,9 @@ try
         TimeKeeper(trial,5) = endPositionSecs_s;                            % duration of the sound played
         TimeKeeper(trial,6) = estStopTime_s;                                % estimation of when the sound is finished
         
-        outp(address, 0);                                                   % should reset the pin after the sound stopped
+        if USE_EEG
+            outp(address, 0);                                                   % should reset the pin after the sound stopped
+        end
         % trigger interval OFFSET
 %         if USE_EEG
 %             outp(address,expMat(trial,5));
@@ -418,8 +416,10 @@ try
             Screen('Flip', w);
         end
         
-        outp(address, 0);                                                   % should reset the oin after the ITI
-                
+        if USE_EEG
+            outp(address, 0);                                                   % should reset the oin after the ITI
+        end
+        
         [KeyIsDown, secs, keyCode, deltaSecs] = KbCheck;
         KeyNum = find(keyCode);
         if keyCode(escapeKey)
