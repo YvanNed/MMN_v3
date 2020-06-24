@@ -98,7 +98,7 @@ try
     %---------------------------- Parameters ------------------------------
     %----------------------------------------------------------------------
     std_dur = 1.00;                                                        % std duration (o) = 1 s (in sec)                
-    dev_dur = [0.900 1.10];                                    % dev duration (x) = 0.9 1.1s (in sec). 100ms difference from the std 
+    dev_dur = [0.90 1.10];                                    % dev duration (x) = 0.9 1.1s (in sec). 100ms difference from the std 
     ISI = [1.80 2.00];                                                    % ISI = 1.8:2s (in sec). ISI have been extended to avoid an overlap of the baseline of the MMN of the previous trial
     ISIf = round(ISI./ifi);                                                 % convert ISI in number of frame
     
@@ -358,16 +358,12 @@ try
         
         % read duration of the interval
         STIM = [];
-        if expMat(trial,2) == 0.200
+        if expMat(trial,2) == 1.00
             STIM = STD;
-        elseif expMat(trial,2)== 0.100
+        elseif expMat(trial,2)== 0.90
             STIM = DEV1;
-        elseif expMat(trial,2)== 0.150
+        elseif expMat(trial,2)== 1.10
             STIM = DEV2;
-        elseif expMat(trial,2) == 0.250
-            STIM = DEV3;
-        elseif expMat(trial,2)== 0.300
-            STIM = DEV4;
         end
         
         PsychPortAudio('FillBuffer', pahandle, STIM);
