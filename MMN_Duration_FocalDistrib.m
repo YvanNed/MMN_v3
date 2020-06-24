@@ -414,8 +414,10 @@ try
         TimeKeeper(trial,4) = startTime_s;                                  % same as the timestamp of soundstart
         TimeKeeper(trial,5) = endPositionSecs_s;                            % duration of the sound played
         TimeKeeper(trial,6) = estStopTime_s;                                % estimation of when the sound is finished
-        
-        outp(address, 0);                                                   % should reset the pin after the sound stopped
+        if USE_EEG
+            outp(address, 0);  
+        end
+        % should reset the pin after the sound stopped
         % trigger interval OFFSET
 %         if USE_EEG
 %             outp(address,expMat(trial,5));
@@ -442,7 +444,9 @@ try
             Screen('Flip', w);
         end
         
-        outp(address, 0);                                                   % should reset the oin after the ITI
+        if USE_EEG
+            outp(address, 0);                                                   % should reset the oin after the ITI
+        end
                 
         [KeyIsDown, secs, keyCode, deltaSecs] = KbCheck;
         KeyNum = find(keyCode);
