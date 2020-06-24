@@ -1,4 +1,4 @@
-function MMN_Duration_v3
+function MMN_Duration_FocalDistrib
 % =========================================================================
 % created by: YN. 23/06/2020
 % last Update: YN. 23/06/2020
